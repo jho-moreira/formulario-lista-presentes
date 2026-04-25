@@ -1,0 +1,187 @@
+<!doctype html>
+<html lang="pt-br">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Escolha de Presente - Azul Serenity</title>
+    <style>
+      body {
+        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+        background-color: #e2eafc; /* Fundo Azul Serenity claro */
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        min-height: 100vh;
+        margin: 0;
+        padding: 20px;
+      }
+      .form-container {
+        background-color: #ffffff;
+        padding: 30px;
+        border-radius: 15px;
+        box-shadow: 0 10px 25px rgba(145, 166, 201, 0.3);
+        width: 100%;
+        max-width: 450px;
+        border-top: 8px solid #b1c9ef; /* Detalhe em Azul Serenity */
+      }
+      h2 {
+        text-align: center;
+        color: #5b7da1;
+        margin-bottom: 10px;
+      }
+      .info-msg {
+        background-color: #f1f5ff;
+        color: #6a8caf;
+        padding: 15px;
+        border-radius: 8px;
+        font-size: 14px;
+        text-align: center;
+        margin-bottom: 25px;
+        line-height: 1.5;
+        border: 1px solid #d1dcf0;
+      }
+      label {
+        display: block;
+        margin-bottom: 8px;
+        color: #5b7da1;
+        font-weight: 600;
+      }
+      input,
+      textarea {
+        width: 100%;
+        padding: 12px;
+        margin-bottom: 18px;
+        border: 1px solid #cedfed;
+        border-radius: 8px;
+        box-sizing: border-box;
+        background-color: #fcfdff;
+        outline: none;
+        transition: border 0.3s;
+      }
+      input:focus,
+      textarea:focus {
+        border: 1px solid #a1c4fd;
+      }
+      textarea {
+        height: 90px;
+        resize: none;
+      }
+      button {
+        width: 100%;
+        padding: 14px;
+        background-color: #b1c9ef;
+        color: #ffffff;
+        border: none;
+        border-radius: 8px;
+        cursor: pointer;
+        font-size: 16px;
+        font-weight: bold;
+        transition: background-color 0.3s;
+      }
+      button:hover {
+        background-color: #92b4e5;
+      }
+      button:disabled {
+        background-color: #d1dcf0;
+        cursor: not-allowed;
+      }
+      #mensagemSucesso {
+        display: none;
+        text-align: center;
+        color: #5b7da1;
+        background-color: #f1f5ff;
+        padding: 20px;
+        border-radius: 8px;
+        margin-top: 15px;
+        border: 1px solid #d1dcf0;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="form-container">
+      <h2>Lista de Presentes</h2>
+
+      <div class="info-msg" id="msgPrincipal">
+        Escolha seu presente abaixo. Ao confirmar, um e-mail será enviado
+        automaticamente para o casal com os detalhes da sua escolha. ✨
+      </div>
+
+      <form id="meuFormulario">
+        <label for="nome">Nome Completo:</label>
+        <input
+          type="text"
+          id="nome"
+          name="nome"
+          placeholder="Como quer ser identificado?"
+          required
+        />
+
+        <label for="telefone">WhatsApp / Telefone:</label>
+        <input
+          type="tel"
+          id="telefone"
+          name="telefone"
+          placeholder="(00) 00000-0000"
+          required
+        />
+
+        <label for="presente">Qual presente você escolheu?</label>
+        <textarea
+          id="presente"
+          name="presente"
+          placeholder="Ex: Jogo de jantar, Air Fryer..."
+          required
+        ></textarea>
+
+        <button type="submit" id="btnEnviar">Confirmar Presente</button>
+      </form>
+
+      <div id="mensagemSucesso">
+        <h3>🎉 Tudo certo!</h3>
+        <p>
+          Sua escolha foi registrada e o casal já foi notificado por e-mail.
+          Obrigado pelo carinho!
+        </p>
+      </div>
+    </div>
+
+    <script>
+      const urlScript =
+        "https://script.google.com/macros/s/AKfycbzRUl4uFxbzswNhv0hmNAlXhMNo3p6U_stvCAxSkAU_Ml7no-Wh0FnHlgTnbpTv1-lC/exec";
+      const form = document.getElementById("meuFormulario");
+      const btn = document.getElementById("btnEnviar");
+      const msgS = document.getElementById("mensagemSucesso");
+      const msgP = document.getElementById("msgPrincipal");
+
+      form.addEventListener("submit", function (e) {
+        e.preventDefault();
+
+        btn.disabled = true;
+        btn.innerText = "Enviando...";
+
+        const formData = new FormData(form);
+        const data = {};
+        formData.forEach((value, key) => (data[key] = value));
+
+        fetch(urlScript, {
+          method: "POST",
+          mode: "no-cors",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(data),
+        })
+          .then(() => {
+            form.style.display = "none";
+            msgP.style.display = "none";
+            msgS.style.display = "block";
+          })
+          .catch((error) => {
+            alert(
+              "Houve um pequeno erro. Verifique sua internet e tente novamente.",
+            );
+            btn.disabled = false;
+            btn.innerText = "Confirmar Presente";
+          });
+      });
+    </script>
+  </body>
+</html>

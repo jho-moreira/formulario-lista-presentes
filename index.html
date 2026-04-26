@@ -77,7 +77,8 @@
       <div id="form-content">
         <h2>Lista de Presentes</h2>
         <div class="info">
-          O casal receberá um e-mail informando sobre sua escolha. ✨
+          Escolha seu presente abaixo. Ao confirmar, um e-mail será enviado
+          automaticamente para o casal com os detalhes da sua escolha. ✨
         </div>
         <form id="presenteForm">
           <label>Nome Completo:</label>
@@ -87,14 +88,21 @@
           <input type="tel" name="telefone" required />
 
           <label>Qual presente escolheu?</label>
-          <textarea name="presente" required></textarea>
+          <textarea
+            name="presente"
+            placeholder="Ex: Jogo de jantar, Air Fryer..."
+            required
+          ></textarea>
 
           <button type="submit" id="btnEnviar">Confirmar Presente</button>
         </form>
       </div>
       <div id="sucesso">
         <h3>🎉 Tudo certo!</h3>
-        <p>Sua escolha foi enviada com sucesso.</p>
+        <p>
+          Sua escolha foi registrada e o casal já foi notificado por e-mail.
+          Obrigado pelo carinho!
+        </p>
       </div>
     </div>
 

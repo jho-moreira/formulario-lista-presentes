@@ -3,72 +3,91 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Lista de Presentes</title>
+    <title>Lista de Presentes - Azul Serenity</title>
     <style>
       body {
-        font-family: sans-serif;
-        background-color: #e2eafc;
+        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+        background-color: #e2eafc; /* Fundo Azul Serenity */
         display: flex;
         justify-content: center;
         align-items: center;
         min-height: 100vh;
         margin: 0;
+        padding: 20px;
       }
       .container {
-        background: white;
+        background-color: #ffffff;
         padding: 30px;
         border-radius: 15px;
+        box-shadow: 0 10px 25px rgba(145, 166, 201, 0.3);
         width: 100%;
-        max-width: 400px;
-        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        max-width: 450px;
         border-top: 8px solid #b1c9ef;
       }
       h2 {
-        color: #5b7da1;
         text-align: center;
+        color: #5b7da1;
+        margin-bottom: 10px;
       }
       .info {
-        font-size: 14px;
+        background-color: #f1f5ff;
         color: #6a8caf;
-        text-align: center;
-        margin-bottom: 20px;
-        background: #f1f5ff;
-        padding: 10px;
+        padding: 15px;
         border-radius: 8px;
+        font-size: 14px;
+        text-align: center;
+        margin-bottom: 25px;
+        line-height: 1.5;
+        border: 1px solid #d1dcf0;
       }
       label {
         display: block;
-        margin: 10px 0 5px;
+        margin-bottom: 8px;
         color: #5b7da1;
-        font-weight: bold;
+        font-weight: 600;
       }
       input,
       textarea {
         width: 100%;
-        padding: 10px;
+        padding: 12px;
+        margin-bottom: 18px;
         border: 1px solid #cedfed;
         border-radius: 8px;
         box-sizing: border-box;
+        background-color: #fcfdff;
+        outline: none;
+      }
+      textarea {
+        height: 90px;
+        resize: none;
       }
       button {
         width: 100%;
-        padding: 15px;
-        background: #b1c9ef;
+        padding: 14px;
+        background-color: #b1c9ef;
+        color: #ffffff;
         border: none;
-        color: white;
-        font-weight: bold;
         border-radius: 8px;
-        margin-top: 20px;
         cursor: pointer;
+        font-size: 16px;
+        font-weight: bold;
+        transition: background-color 0.3s;
+      }
+      button:hover {
+        background-color: #92b4e5;
       }
       button:disabled {
-        background: #ccc;
+        background-color: #d1dcf0;
+        cursor: not-allowed;
       }
       #sucesso {
         display: none;
         text-align: center;
         color: #5b7da1;
+        background-color: #f1f5ff;
         padding: 20px;
+        border-radius: 8px;
+        border: 1px solid #d1dcf0;
       }
     </style>
   </head>
@@ -76,20 +95,35 @@
     <div class="container">
       <div id="form-content">
         <h2>Lista de Presentes</h2>
+
         <div class="info">
           Escolha seu presente abaixo. Ao confirmar, um e-mail será enviado
           automaticamente para o casal com os detalhes da sua escolha. ✨
         </div>
-        <form id="presenteForm">
-          <label>Nome Completo:</label>
-          <input type="text" name="nome" required />
 
-          <label>Telefone:</label>
-          <input type="tel" name="telefone" required />
+        <form id="presenteForm">
+          <label for="nome">Nome Completo:</label>
+          <input
+            type="text"
+            id="nome"
+            name="nome"
+            placeholder="Seu nome"
+            required
+          />
+
+          <label for="telefone">WhatsApp / Telefone:</label>
+          <input
+            type="tel"
+            id="telefone"
+            name="telefone"
+            placeholder="(00) 00000-0000"
+            required
+          />
 
           <label>Qual presente escolheu?</label>
           <textarea
             name="presente"
+            id="presente"
             placeholder="Ex: Jogo de jantar, Air Fryer..."
             required
           ></textarea>
@@ -97,41 +131,43 @@
           <button type="submit" id="btnEnviar">Confirmar Presente</button>
         </form>
       </div>
+
       <div id="sucesso">
         <h3>🎉 Tudo certo!</h3>
-        <p>
-          Sua escolha foi registrada e o casal já foi notificado por e-mail.
-          Obrigado pelo carinho!
-        </p>
+        <p>Sua escolha foi registrada e o casal será notificado. Obrigado!</p>
       </div>
     </div>
 
     <script>
-      // 1. COLE SUA URL ABAIXO ENTRE AS ASPAS:
+      // IMPORTANTE: Cole sua URL entre as aspas abaixo
       const URL_SCRIPT =
         "https://script.google.com/macros/s/AKfycbw1X353XGdKpN-WhP39eXJk7vN5CLjXm9Pp13i6o-F2y6HxYsDVoRF-85CN-ew8Y4k/exec";
 
       const form = document.getElementById("presenteForm");
       const btn = document.getElementById("btnEnviar");
+      const formContent = document.getElementById("form-content");
+      const msgSucesso = document.getElementById("sucesso");
 
       form.addEventListener("submit", function (e) {
         e.preventDefault();
         btn.disabled = true;
         btn.innerText = "Enviando...";
 
-        // Enviando como formulário tradicional para evitar erros de leitura no Google
+        const formData = new URLSearchParams(new FormData(form));
+
         fetch(URL_SCRIPT, {
           method: "POST",
           mode: "no-cors",
-          body: new URLSearchParams(new FormData(form)),
+          body: formData,
         })
           .then(() => {
-            document.getElementById("form-content").style.display = "none";
-            document.getElementById("sucesso").style.display = "block";
+            formContent.style.display = "none";
+            msgSucesso.style.display = "block";
           })
-          .catch(() => {
-            alert("Erro ao enviar. Tente novamente.");
+          .catch((err) => {
+            alert("Erro ao enviar. Verifique sua conexão.");
             btn.disabled = false;
+            btn.innerText = "Confirmar Presente";
           });
       });
     </script>
